@@ -1,4 +1,6 @@
-@extends('../layouts/master', ['title'=>'Events'])
+@extends('../layouts/master')
+	
+	@section('title','Events')
 	
 	@section('content')
 		<ul>

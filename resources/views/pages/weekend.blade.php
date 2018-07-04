@@ -1,9 +1,12 @@
-@extends('../layouts/master', ['title'=>'Weekend'])
 
+@extends('../layouts/master')
+
+	@section('title','Weekend')
+	
 	@section('content')
-		@if ($weekend)
-			{{'va t\'amuser'}}
-		@else
-			{{ 'va travailler'}}
-		@endif
+
+		{{-- utilisation de la methode static isWeekend contenue dans la classe App\Utilities\Date --}}
+		@include('../shared/_weekend')
+		
+
 	@endsection
