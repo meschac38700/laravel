@@ -16,6 +16,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Mise à jour des données depuis la base de données en utilisant le query builder
 Route::get('database/fluentQueryBuilder/update/',function(Request $request)
 {
 	$title = $request->input('title',"titre par défaut");
@@ -24,6 +25,7 @@ Route::get('database/fluentQueryBuilder/update/',function(Request $request)
 	dump($success);
 
 });
+//Insertion des données dans la base de données
 Route::get('/database/insert/', function(Request $request)
 {	
 	$title = $request->input('title',"titre par défaut");
@@ -33,13 +35,14 @@ Route::get('/database/insert/', function(Request $request)
 
 })->where(['title'=>'[^0-9]+', 'content'=>'[A-Za-z]']);
 
+// Insertion des données dans la base de données en utilisant les query builder
 Route::get('/database/fluentQueryBuilder/insert/', function(Request $request){
 	$title = $request->input('title',"titre par défaut");
 	$content = $request->input('content',"commentaire par défaut");
 	$success = DB::table('posts')->insert(['title'=> $title, 'body'=> $content]);
 	dump($success);
 });
-//Un autre moyen de faire des requetes sql
+//Utilisation des query builder pour select des données de la base
 Route::get('/about/fluentQueryBuilder/', function()
 {
 	dump(DB::table('posts')->orderBy('title', 'desc')->get()); // tous les resultats
@@ -53,6 +56,8 @@ Route::get('/about/fluentQueryBuilder/', function()
 	dump(DB::table('posts')->first());
 	dump(DB::table('posts')->first()->title);
 });
+
+
 Route::get('/about', function(){
 	$posts_data =  DB::select('SELECT * FROM posts');
 	dump($posts_data);
