@@ -12,10 +12,15 @@
 */
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
 });
+*/
 
+Route::get('/', function()
+{
+	DB::statement('DROP TABLE posts');
+});
 // Mise à jour des données depuis la base de données en utilisant le query builder
 Route::get('database/fluentQueryBuilder/update/',function(Request $request)
 {
@@ -42,9 +47,23 @@ Route::get('/database/fluentQueryBuilder/insert/', function(Request $request){
 	$success = DB::table('posts')->insert(['title'=> $title, 'body'=> $content]);
 	dump($success);
 });
+
+// Where dynamic
+
+Route::get('/about/whereDynamic/', function(){
+	/*return DB::table("posts")
+				->whereTitleOrBody("titre par défaut", "un autre commentaire")
+				->get();*/
+	return DB::table("posts")
+				->whereTitle('titre par défaut')
+				->whereBody('commentaire par défaut')
+				->get();
+});
 //Utilisation des query builder pour select des données de la base
 Route::get('/about/fluentQueryBuilder/', function()
 {
+
+	dump("Il y a ". DB::table("posts")->count() . " articles dans la table posts");
 	dump(DB::table('posts')->orderBy('title', 'desc')->get()); // tous les resultats
 	dump(DB::table('posts')->get()->take(2)); // limite à deux resultats
 	dump(DB::table('posts')
@@ -52,7 +71,7 @@ Route::get('/about/fluentQueryBuilder/', function()
 		->whereBody('Juste un commentaire')
 		->get()
 	);
-	dump(DB::table('posts')->get(['title']));
+	dump(DB::table('posts')->get(['title as titre', 'body as commentaire']));
 	dump(DB::table('posts')->first());
 	dump(DB::table('posts')->first()->title);
 });
@@ -87,3 +106,19 @@ Route::get('/weekend', function()
 {
 	return view('pages/weekend');
 });
+use App\Post;
+Route::get('/about/find/', function ()
+{
+	//dump(DB::table("posts")->find(1));
+	/*$post = Post::find(1);
+	dump($post->title);*/
+
+	//dd(Post::all()); // Selectionner tous les articles dans la table post
+
+	/*$post = new Post(['title'=>'Mon jolie titre', 'body'=>'Mon jolie contenu']);
+	$post->save();*/ // creer un objet et l'inseret dans la base
+	Post::create(['title'=>'En une ligne', 'body'=>'En une seule ligne']);
+
+	dd(Post::all());
+});
+
